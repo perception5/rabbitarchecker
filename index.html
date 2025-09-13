@@ -9,14 +9,14 @@
 <body>
   <h1>Rabbitars Wallet Checker</h1>
   <p>Paste an Ethereum wallet address to check ownership.</p>
+  <button id="darkModeToggle">🌓</button>
   <div class="form-container">
   <input id="wallet" placeholder="0x...">
   <button onclick="checkNFTs()">Check Wallet</button>
   </div>
   <div id="results"></div>
-
-  
   <pre id="debug"></pre>
+  
 
   <script>
     const API_KEY = "BWgsxPuacgw5Tvb8VClPY"; // Replace with your key
@@ -74,6 +74,22 @@
         console.error(err);
       }
     }
-  </script>
+    const toggle = document.getElementById('darkModeToggle');
+
+    // Load saved theme
+    if(localStorage.getItem('darkMode') === 'enabled') {
+      document.body.classList.add('dark-mode');
+    }
+
+    // Toggle on click
+    toggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      if(document.body.classList.contains('dark-mode')){
+        localStorage.setItem('darkMode', 'enabled');
+      } else {
+        localStorage.setItem('darkMode', 'disabled');
+      }
+    });
+</script>
 </body>
 </html>
