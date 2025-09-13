@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
     debug.textContent = "";
 
     try {
-      let url = `https://eth-mainnet.g.alchemy.com/nft/v2/YOUR_API_KEY/getNFTs?owner=${wallet}&contractAddresses[]=0x65c234d041f9ef96e2f126263727dfa582206d82&withMetadata=true`;
+      let url = `https://eth-mainnet.g.alchemy.com/nft/v2/BWgsxPuacgw5Tvb8VClPY/getNFTs?owner=${wallet}&contractAddresses[]=0x65c234d041f9ef96e2f126263727dfa582206d82&withMetadata=true`;
       if (pageKey) url += `&pageKey=${pageKey}`;
 
       const res = await fetch(url);
