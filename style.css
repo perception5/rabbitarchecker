@@ -4,7 +4,7 @@ body {
   background: #fafafa;
   color: #111;
   margin: 0;
-  padding: 40px;
+  padding: 20px; /* updated for mobile */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -22,18 +22,17 @@ p {
   text-align: center;
 }
 
-/* Fix form container selector */
+/* Form container */
 .form-container {
   width: 100%;
-  max-width: 400px; /* limits width of input/button */
+  max-width: 95%; /* mobile-friendly width */
   display: flex;
   flex-direction: column;
   gap: 12px;
-  margin: 0 auto 32px auto; /* center and add spacing below */
+  margin: 0 auto 32px auto;
   position: static !important;
 }
 
-/* Adjust input and button inside form container */
 .form-container input,
 .form-container button {
   padding: 12px 16px;
@@ -67,14 +66,15 @@ button:hover {
 
 /* Results grid */
 #results {
-  margin-top: 32px;
+  margin-top: 24px; /* slightly smaller on mobile */
   width: 100%;
   max-width: 800px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
 }
 
+/* NFT cards */
 .nft {
   background: #fff;
   border-radius: 16px;
@@ -108,11 +108,12 @@ button:hover {
   display: none; /* Hide debug panel in production */
 }
 
+/* Dark mode toggle button */
 #darkModeToggle {
   position: fixed;
-  top: 20px;
-  right: 20px;
-  padding: 10px 14px;
+  top: 15px;
+  right: 15px;
+  padding: 8px 12px;
   border-radius: 12px;
   border: none;
   background: rgba(0, 113, 227, 0.85);
@@ -130,6 +131,25 @@ button:hover {
 }
 
 /* Dark mode overrides */
+body.dark-mode {
+  background: #111;
+  color: #fafafa;
+}
+
+body.dark-mode input,
+body.dark-mode textarea {
+  background: #222;
+  border-color: #555;
+  color: #fafafa;
+}
+
+body.dark-mode button {
+  background: #1a73e8;
+}
+
+body.dark-mode button:hover {
+  background: #1664c1;
+}
 
 body.dark-mode #darkModeToggle {
   background: rgba(26, 115, 232, 0.85);
@@ -139,51 +159,22 @@ body.dark-mode #darkModeToggle:hover {
   background: rgba(22, 100, 193, 0.95);
 }
 
-/* Responsive */
+/* Responsive adjustments */
 @media (max-width: 500px) {
-  body {
-    padding: 20px;
-  }
   .form-container input,
   .form-container button {
-    font-size: 0.95rem;
-    padding: 10px 12px;
+    font-size: 0.9rem;
+    padding: 10px;
+  }
+
+  #results {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 12px;
+  }
+
+  #darkModeToggle {
+    padding: 6px 10px;
+    top: 10px;
+    right: 10px;
   }
 }
-
-/* Dark mode overrides */
-body.dark-mode {
-  background: #111;
-  color: #fafafa;
-}
-
-body.dark-mode p {
-  color: #ccc;
-}
-
-body.dark-mode .form-container input {
-  background: #222;
-  color: #fafafa;
-  border: 1px solid #555;
-}
-
-body.dark-mode .form-container button {
-  background: #1a73e8;
-  color: #fff;
-}
-
-body.dark-mode .form-container button:hover {
-  background: #1664c1;
-}
-
-body.dark-mode #results .nft {
-  background: #222;
-  color: #fafafa;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-}
-
-body.dark-mode #results .nft:hover {
-  box-shadow: 0 12px 32px rgba(0,0,0,0.6);
-}
-
-
