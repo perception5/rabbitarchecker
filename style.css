@@ -118,4 +118,34 @@ button:hover {
     font-size: 0.95rem;
     padding: 10px 12px;
   }
+
+#darkModeToggle {
+  position: fixed;
+  top: 20px;       /* distance from top */
+  right: 20px;     /* distance from right */
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: none;
+  background: rgba(0, 113, 227, 0.85); /* slightly transparent */
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  z-index: 1000;   /* stay above other elements */
+  transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+#darkModeToggle:hover {
+  background: rgba(0, 91, 181, 0.95);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2); /* subtle hover glow */
+  }
+
+/* Dark mode styling */
+body.dark-mode #darkModeToggle {
+  background: rgba(26, 115, 232, 0.85);
+  }
+
+body.dark-mode #darkModeToggle:hover {
+  background: rgba(22, 100, 193, 0.95);
+  }
 }
