@@ -8,6 +8,7 @@
     input, button { padding: 8px; margin: 6px 0; width: 100%; }
     .nft { margin: 12px 0; padding: 10px; border: 1px solid #ccc; }
     img { max-width: 150px; display: block; }
+    pre { background: #f4f4f4; padding: 10px; overflow-x: auto; }
   </style>
 </head>
 <body>
@@ -16,25 +17,32 @@
   <input id="wallet" placeholder="0x...">
   <button onclick="checkNFTs()">Check Wallet</button>
   <div id="results"></div>
+  <pre id="debug"></pre>
 
   <script>
-    const API_KEY = "BWgsxPuacgw5Tvb8VClPY"; // <-- get free from https://dashboard.alchemy.com/
-    const CONTRACT = "0xED5AF388653567Af2F388E6224dC7C4b3241C544"; // Rabbitar contract
+    const API_KEY = "BWgsxPuacgw5Tvb8VClPY"; // Replace with your key
+    const CONTRACT = "0x65c234d041f9ef96e2f126263727dfa582206d82"; // Playboy Rabbitars contract
 
-    async function checkNFTs() {
+    async function checkNFTs(pageKey) {
       const wallet = document.getElementById("wallet").value.trim();
       const results = document.getElementById("results");
-      results.innerHTML = "Checking...";
+      const debug = document.getElementById("debug");
 
       if (!wallet) {
         results.innerHTML = "Please enter a wallet address.";
         return;
       }
 
+      results.innerHTML = "Checking...";
+      debug.textContent = "";
+
       try {
-        const url = `https://eth-mainnet.g.alchemy.com/nft/v2/${API_KEY}/getNFTs?owner=${wallet}&contractAddresses[]=${CONTRACT}`;
+        let url = `https://eth-mainnet.g.alchemy.com/nft/v2/${API_KEY}/getNFTs?owner=${wallet}&contractAddresses[]=${CONTRACT}&withMetadata=true`;
+        if (pageKey) url += `&pageKey=${pageKey}`;
+
         const res = await fetch(url);
         const data = await res.json();
+        debug.textContent = JSON.stringify(data, null, 2);
 
         if (data.ownedNfts && data.ownedNfts.length > 0) {
           results.innerHTML = `<h2>Rabbitars Found!</h2>`;
@@ -42,16 +50,26 @@
             const div = document.createElement("div");
             div.className = "nft";
             div.innerHTML = `
-              <p>Token ID: ${nft.id.tokenId}</p>
-              ${nft.media[0]?.gateway ? `<img src="${nft.media[0].gateway}" alt="NFT image">` : ""}
+              <p>Token ID: ${parseInt(nft.id.tokenId, 16)}</p>
+              ${nft.media && nft.media[0] && nft.media[0].gateway ? `<img src="${nft.media[0].gateway}" alt="NFT image">` : ""}
             `;
             results.appendChild(div);
           });
+
+          // Handle pagination if more NFTs exist
+          if (data.pageKey) {
+            const nextBtn = document.createElement("button");
+            nextBtn.textContent = "Load More";
+            nextBtn.onclick = () => checkNFTs(data.pageKey);
+            results.appendChild(nextBtn);
+          }
+
         } else {
           results.innerHTML = "No Rabbitars owned.";
         }
       } catch (err) {
-        results.innerHTML = "Error: " + err.message;
+        results.innerHTML = "Error: " + err;
+        console.error(err);
       }
     }
   </script>
