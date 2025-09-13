@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Rabbitars Wallet Checker</title>
+  <style>
+    body { font-family: sans-serif; max-width: 600px; margin: 40px auto; }
+    input, button { padding: 8px; margin: 6px 0; width: 100%; }
+    .nft { margin: 12px 0; padding: 10px; border: 1px solid #ccc; }
+    img { max-width: 150px; display: block; }
+  </style>
+</head>
+<body>
+  <h1>Playboy Rabbitars Wallet Checker</h1>
+  <p>Paste an Ethereum wallet address to check ownership.</p>
+  <input id="wallet" placeholder="0x...">
+  <button onclick="checkNFTs()">Check Wallet</button>
+  <div id="results"></div>
+
+  <script>
+    const API_KEY = "BWgsxPuacgw5Tvb8VClPY"; // <-- get free from https://dashboard.alchemy.com/
+    const CONTRACT = "0xED5AF388653567Af2F388E6224dC7C4b3241C544"; // Rabbitar contract
+
+    async function checkNFTs() {
+      const wallet = document.getElementById("wallet").value.trim();
+      const results = document.getElementById("results");
+      results.innerHTML = "Checking...";
+
+      if (!wallet) {
+        results.innerHTML = "Please enter a wallet address.";
+        return;
+      }
+
+      try {
+        const url = `https://eth-mainnet.g.alchemy.com/nft/v2/${API_KEY}/getNFTs?owner=${wallet}&contractAddresses[]=${CONTRACT}`;
+        const res = await fetch(url);
+        const data = await res.json();
+
+        if (data.ownedNfts && data.ownedNfts.length > 0) {
+          results.innerHTML = `<h2>Rabbitars Found!</h2>`;
+          data.ownedNfts.forEach(nft => {
+            const div = document.createElement("div");
+            div.className = "nft";
+            div.innerHTML = `
+              <p>Token ID: ${nft.id.tokenId}</p>
+              ${nft.media[0]?.gateway ? `<img src="${nft.media[0].gateway}" alt="NFT image">` : ""}
+            `;
+            results.appendChild(div);
+          });
+        } else {
+          results.innerHTML = "No Rabbitars owned.";
+        }
+      } catch (err) {
+        results.innerHTML = "Error: " + err.message;
+      }
+    }
+  </script>
+</body>
+</html>
