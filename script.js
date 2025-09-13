@@ -1,4 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const API_KEY = "BWgsxPuacgw5Tvb8VClPY"; // your Alchemy key
+  const CONTRACT = "0x65c234d041f9ef96e2f126263727dfa582206d82";
+
   const toggle = document.getElementById('darkModeToggle');
 
   // Apply saved theme
@@ -29,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
     debug.textContent = "";
 
     try {
-      let url = `https://eth-mainnet.g.alchemy.com/nft/v2/BWgsxPuacgw5Tvb8VClPY/getNFTs?owner=${wallet}&contractAddresses[]=0x65c234d041f9ef96e2f126263727dfa582206d82&withMetadata=true`;
+      let url = `https://eth-mainnet.g.alchemy.com/nft/v2/${API_KEY}/getNFTs?owner=${wallet}&contractAddresses[]=${CONTRACT}&withMetadata=true`;
       if (pageKey) url += `&pageKey=${pageKey}`;
 
       const res = await fetch(url);
@@ -52,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
           const tokenId = parseInt(nft.id.tokenId, 16);
           const div = document.createElement("div");
           div.className = "nft";
-          const openSeaLink = `https://opensea.io/assets/ethereum/0x65c234d041f9ef96e2f126263727dfa582206d82/${tokenId}`;
+          const openSeaLink = `https://opensea.io/assets/ethereum/${CONTRACT}/${tokenId}`;
           div.innerHTML = `
             ${nft.media?.[0]?.gateway ? `<a href="${openSeaLink}" target="_blank"><img src="${nft.media[0].gateway}" alt="NFT image"></a>` : ""}
             <p>Token ID: ${tokenId}</p>
