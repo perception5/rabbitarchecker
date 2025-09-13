@@ -122,23 +122,23 @@ button:hover {
 
 #darkModeToggle {
   position: fixed;
-  top: 20px;       /* distance from top */
-  right: 20px;     /* distance from right */
+  top: 20px;
+  right: 20px;
   padding: 10px 14px;
   border-radius: 12px;
   border: none;
-  background: rgba(0, 113, 227, 0.85); /* slightly transparent */
+  background: rgba(0, 113, 227, 0.85);
   color: #fff;
   font-weight: 600;
   cursor: pointer;
-  z-index: 1000;   /* stay above other elements */
+  z-index: 1000;
   transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-}
+  }
 
 #darkModeToggle:hover {
   background: rgba(0, 91, 181, 0.95);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2); /* subtle hover glow */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
   }
 
 /* Dark mode styling */
