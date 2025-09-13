@@ -7,13 +7,13 @@ document.addEventListener("DOMContentLoaded", () => {
   // Apply saved theme
   if (localStorage.getItem('darkMode') === 'enabled') {
     document.body.classList.add('dark-mode');
-    toggle.textContent = '☀️';
+    toggle.textContent = '🌕';
   }
 
   // Toggle dark mode on click
   toggle.addEventListener('click', () => {
     const isDark = document.body.classList.toggle('dark-mode');
-    toggle.textContent = isDark ? '☀️' : '🌓';
+    toggle.textContent = isDark ? '🌕' : '🌑';
     localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
   });
 
