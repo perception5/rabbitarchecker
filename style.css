@@ -22,9 +22,20 @@ p {
   text-align: center;
 }
 
-input, button {
+/* Fix form container selector */
+.form-container {
+  width: 100%;
+  max-width: 400px; /* limits width of input/button */
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0 auto 32px auto; /* center and add spacing below */
+}
+
+/* Adjust input and button inside form container */
+.form-container input,
+.form-container button {
   padding: 12px 16px;
-  margin: 8px 0;
   width: 100%;
   border-radius: 12px;
   border: 1px solid #ccc;
@@ -53,21 +64,7 @@ button:hover {
   transform: translateY(-1px);
 }
 
-form-container {
-  width: 100%;
-  max-width: 400px; /* limits width of input/button */
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin: 0 auto 32px auto; /* center and add spacing below */
-}
-
-/* Adjust existing input and button */
-input, button {
-  width: 100%; /* fills the container, not full page */
-  box-sizing: border-box;
-}
-
+/* Results grid */
 #results {
   margin-top: 32px;
   width: 100%;
@@ -76,7 +73,6 @@ input, button {
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 20px;
 }
-
 
 .nft {
   background: #fff;
@@ -116,7 +112,8 @@ input, button {
   body {
     padding: 20px;
   }
-  input, button {
+  .form-container input,
+  .form-container button {
     font-size: 0.95rem;
     padding: 10px 12px;
   }
