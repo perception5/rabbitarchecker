@@ -1,80 +1,180 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const API_KEY = "BWgsxPuacgw5Tvb8VClPY"; // your Alchemy key
-  const CONTRACT = "0x65c234d041f9ef96e2f126263727dfa582206d82";
+/* Global */
+body {
+  font-family: 'Inter', sans-serif;
+  background: #fafafa;
+  color: #111;
+  margin: 0;
+  padding: 20px; /* updated for mobile */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-  const toggle = document.getElementById('darkModeToggle');
+h1 {
+  font-weight: 600;
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
 
-  // Apply saved theme
-  if (localStorage.getItem('darkMode') === 'enabled') {
-    document.body.classList.add('dark-mode');
-    toggle.textContent ='🌕';
+p {
+  color: #555;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+/* Form container */
+.form-container {
+  width: 100%;
+  max-width: 95%; /* mobile-friendly width */
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0 auto 32px auto;
+  position: static !important;
+}
+
+.form-container input,
+.form-container button {
+  padding: 12px 16px;
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  outline: none;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+
+input:focus {
+  border-color: #0071e3;
+  box-shadow: 0 0 6px rgba(0,113,227,0.3);
+}
+
+button {
+  background: #0071e3;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background: #005bb5;
+  transform: translateY(-1px);
+}
+
+/* Results grid */
+#results {
+  margin-top: 24px; /* slightly smaller on mobile */
+  width: 100%;
+  max-width: 800px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+}
+
+/* NFT cards */
+.nft {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.nft:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+}
+
+.nft img {
+  max-width: 100%;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  display: block;
+}
+
+.nft p {
+  margin: 12px 0;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+#debug {
+  display: none; /* Hide debug panel in production */
+}
+
+/* Dark mode toggle button */
+#darkModeToggle {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: none;
+  background: rgba(0, 113, 227, 0.85);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  z-index: 1000;
+  transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+#darkModeToggle:hover {
+  background: rgba(0, 91, 181, 0.95);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* Dark mode overrides */
+body.dark-mode {
+  background: #111;
+  color: #fafafa;
+}
+
+body.dark-mode input,
+body.dark-mode textarea {
+  background: #222;
+  border-color: #555;
+  color: #fafafa;
+}
+
+body.dark-mode button {
+  background: #1a73e8;
+}
+
+body.dark-mode button:hover {
+  background: #1664c1;
+}
+
+body.dark-mode #darkModeToggle {
+  background: rgba(26, 115, 232, 0.85);
+}
+
+body.dark-mode #darkModeToggle:hover {
+  background: rgba(22, 100, 193, 0.95);
+}
+
+/* Responsive adjustments */
+@media (max-width: 500px) {
+  .form-container input,
+  .form-container button {
+    font-size: 0.9rem;
+    padding: 10px;
   }
 
-  // Toggle dark mode on click
-  toggle.addEventListener('click', () => {
-    const isDark = document.body.classList.toggle('dark-mode');
-    toggle.textContent = isDark ? '🌕' : '🌑';
-    localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
-  });
+  #results {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 12px;
+  }
 
-  // Wallet checker function (make global)
-  window.checkNFTs = async function(pageKey) {
-    const wallet = document.getElementById("wallet").value.trim();
-    const results = document.getElementById("results");
-    const debug = document.getElementById("debug");
-
-    if (!wallet) {
-      results.innerHTML = "Please enter a wallet address.";
-      return;
-    }
-
-    results.innerHTML = "Checking...";
-    debug.textContent = "";
-
-    try {
-      let url = `https://eth-mainnet.g.alchemy.com/nft/v2/${API_KEY}/getNFTs?owner=${wallet}&contractAddresses[]=${CONTRACT}&withMetadata=true`;
-      if (pageKey) url += `&pageKey=${pageKey}`;
-
-      const res = await fetch(url);
-
-      // Handle non-JSON responses gracefully
-      const contentType = res.headers.get("content-type");
-      let data;
-      if (contentType && contentType.includes("application/json")) {
-        data = await res.json();
-      } else {
-        const text = await res.text();
-        results.innerHTML = "Error: " + text;
-        console.error("Non-JSON response:", text);
-        return;
-      }
-
-      results.innerHTML = "";
-      if (data.ownedNfts && data.ownedNfts.length > 0) {
-        data.ownedNfts.forEach(nft => {
-          const tokenId = parseInt(nft.id.tokenId, 16);
-          const div = document.createElement("div");
-          div.className = "nft";
-          const openSeaLink = `https://opensea.io/assets/ethereum/${CONTRACT}/${tokenId}`;
-          div.innerHTML = `
-            ${nft.media?.[0]?.gateway ? `<a href="${openSeaLink}" target="_blank"><img src="${nft.media[0].gateway}" alt="NFT image"></a>` : ""}
-            <p>Token ID: ${tokenId}</p>
-          `;
-          results.appendChild(div);
-        });
-
-        if (data.pageKey) {
-          const nextBtn = document.createElement("button");
-          nextBtn.textContent = "Load More";
-          nextBtn.onclick = () => checkNFTs(data.pageKey);
-          results.appendChild(nextBtn);
-        }
-      } else {
-        results.innerHTML = "<p style='text-align:center;color:#777;'>No Rabbitars owned.</p>";
-      }
-    } catch (err) {
-      results.innerHTML = "Error: " + err;
-      console.error(err);
-    }
-  };
-});
+  #darkModeToggle {
+    padding: 6px 10px;
+    top: 10px;
+    right: 10px;
+  }
+}
