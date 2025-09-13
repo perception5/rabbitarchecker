@@ -7,7 +7,7 @@
     body { font-family: sans-serif; max-width: 600px; margin: 40px auto; }
     input, button { padding: 8px; margin: 6px 0; width: 100%; }
     .nft { margin: 12px 0; padding: 10px; border: 1px solid #ccc; }
-    img { max-width: 150px; display: block; }
+    img { max-width: 150px; display: block; cursor: pointer; }
     pre { background: #f4f4f4; padding: 10px; overflow-x: auto; }
   </style>
 </head>
@@ -47,16 +47,21 @@
         if (data.ownedNfts && data.ownedNfts.length > 0) {
           results.innerHTML = `<h2>Rabbitars Found!</h2>`;
           data.ownedNfts.forEach(nft => {
+            const tokenId = parseInt(nft.id.tokenId, 16);
             const div = document.createElement("div");
             div.className = "nft";
+
+            // Build MetaMask deep link
+            const metamaskLink = `https://metamask.app.link/nft/${CONTRACT}/${tokenId}?chain=ethereum`;
+
             div.innerHTML = `
-              <p>Token ID: ${parseInt(nft.id.tokenId, 16)}</p>
-              ${nft.media && nft.media[0] && nft.media[0].gateway ? `<img src="${nft.media[0].gateway}" alt="NFT image">` : ""}
+              <p>Token ID: ${tokenId}</p>
+              ${nft.media && nft.media[0] && nft.media[0].gateway ? `<a href="${metamaskLink}" target="_blank"><img src="${nft.media[0].gateway}" alt="NFT image"></a>` : ""}
             `;
             results.appendChild(div);
           });
 
-          // Handle pagination if more NFTs exist
+          // Pagination button
           if (data.pageKey) {
             const nextBtn = document.createElement("button");
             nextBtn.textContent = "Load More";
