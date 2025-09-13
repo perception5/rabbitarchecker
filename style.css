@@ -159,4 +159,39 @@ body.dark-mode #darkModeToggle:hover {
   }
 }
 
+/* Dark mode overrides */
+body.dark-mode {
+  background: #111;
+  color: #fafafa;
+}
+
+body.dark-mode p {
+  color: #ccc;
+}
+
+body.dark-mode .form-container input {
+  background: #222;
+  color: #fafafa;
+  border: 1px solid #555;
+}
+
+body.dark-mode .form-container button {
+  background: #1a73e8;
+  color: #fff;
+}
+
+body.dark-mode .form-container button:hover {
+  background: #1664c1;
+}
+
+body.dark-mode #results .nft {
+  background: #222;
+  color: #fafafa;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+
+body.dark-mode #results .nft:hover {
+  box-shadow: 0 12px 32px rgba(0,0,0,0.6);
+}
+
 
