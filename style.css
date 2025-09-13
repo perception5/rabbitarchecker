@@ -130,14 +130,6 @@ button:hover {
 }
 
 /* Dark mode overrides */
-body.dark-mode {
-  --bg-color: #111;
-  --text-color: #fafafa;
-  --input-bg: #222;
-  --input-border: #555;
-  --button-bg: #1a73e8;
-  --button-hover: #1664c1;
-}
 
 body.dark-mode #darkModeToggle {
   background: rgba(26, 115, 232, 0.85);
