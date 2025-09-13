@@ -108,18 +108,6 @@ button:hover {
   display: none; /* Hide debug panel in production */
 }
 
-/* Responsive */
-@media (max-width: 500px) {
-  body {
-    padding: 20px;
-  }
-  .form-container input,
-  .form-container button {
-    font-size: 0.95rem;
-    padding: 10px 12px;
-  }
-}
-
 #darkModeToggle {
   position: fixed;
   top: 20px;
@@ -133,20 +121,43 @@ button:hover {
   cursor: pointer;
   z-index: 1000;
   transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-  }
+}
 
 #darkModeToggle:hover {
   background: rgba(0, 91, 181, 0.95);
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  }
+}
 
-/* Dark mode styling */
+/* Dark mode overrides */
+body.dark-mode {
+  --bg-color: #111;
+  --text-color: #fafafa;
+  --input-bg: #222;
+  --input-border: #555;
+  --button-bg: #1a73e8;
+  --button-hover: #1664c1;
+}
+
 body.dark-mode #darkModeToggle {
   background: rgba(26, 115, 232, 0.85);
-  }
+}
 
 body.dark-mode #darkModeToggle:hover {
   background: rgba(22, 100, 193, 0.95);
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+  body {
+    padding: 20px;
   }
+  .form-container input,
+  .form-container button {
+    font-size: 0.95rem;
+    padding: 10px 12px;
+  }
+}
+
+
 }
