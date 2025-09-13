@@ -1,22 +1,20 @@
-// script.js
-
 document.addEventListener("DOMContentLoaded", () => {
   const toggle = document.getElementById('darkModeToggle');
 
-  // Load saved theme
+  // Apply saved theme
   if (localStorage.getItem('darkMode') === 'enabled') {
     document.body.classList.add('dark-mode');
     toggle.textContent = '☀️';
   }
 
-  // Toggle dark mode
+  // Toggle dark mode on click
   toggle.addEventListener('click', () => {
-    document.body.classList.toggle('dark-mode');
-    toggle.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌓';
-    localStorage.setItem('darkMode', document.body.classList.contains('dark-mode') ? 'enabled' : 'disabled');
+    const isDark = document.body.classList.toggle('dark-mode');
+    toggle.textContent = isDark ? '☀️' : '🌓';
+    localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
   });
 
-  // Wallet checker function
+  // Wallet checker function (make global)
   window.checkNFTs = async function(pageKey) {
     const wallet = document.getElementById("wallet").value.trim();
     const results = document.getElementById("results");
@@ -35,8 +33,18 @@ document.addEventListener("DOMContentLoaded", () => {
       if (pageKey) url += `&pageKey=${pageKey}`;
 
       const res = await fetch(url);
-      const data = await res.json();
-      debug.textContent = JSON.stringify(data, null, 2);
+
+      // Handle non-JSON responses gracefully
+      const contentType = res.headers.get("content-type");
+      let data;
+      if (contentType && contentType.includes("application/json")) {
+        data = await res.json();
+      } else {
+        const text = await res.text();
+        results.innerHTML = "Error: " + text;
+        console.error("Non-JSON response:", text);
+        return;
+      }
 
       results.innerHTML = "";
       if (data.ownedNfts && data.ownedNfts.length > 0) {
@@ -44,7 +52,6 @@ document.addEventListener("DOMContentLoaded", () => {
           const tokenId = parseInt(nft.id.tokenId, 16);
           const div = document.createElement("div");
           div.className = "nft";
-
           const openSeaLink = `https://opensea.io/assets/ethereum/0x65c234d041f9ef96e2f126263727dfa582206d82/${tokenId}`;
           div.innerHTML = `
             ${nft.media?.[0]?.gateway ? `<a href="${openSeaLink}" target="_blank"><img src="${nft.media[0].gateway}" alt="NFT image"></a>` : ""}
@@ -66,5 +73,5 @@ document.addEventListener("DOMContentLoaded", () => {
       results.innerHTML = "Error: " + err;
       console.error(err);
     }
-  }
+  };
 });
