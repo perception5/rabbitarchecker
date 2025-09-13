@@ -53,6 +53,21 @@ button:hover {
   transform: translateY(-1px);
 }
 
+form-container {
+  width: 100%;
+  max-width: 400px; /* limits width of input/button */
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0 auto 32px auto; /* center and add spacing below */
+}
+
+/* Adjust existing input and button */
+input, button {
+  width: 100%; /* fills the container, not full page */
+  box-sizing: border-box;
+}
+
 #results {
   margin-top: 32px;
   width: 100%;
@@ -61,6 +76,7 @@ button:hover {
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 20px;
 }
+
 
 .nft {
   background: #fff;
