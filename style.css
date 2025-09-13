@@ -30,12 +30,6 @@ p {
   flex-direction: column;
   gap: 12px;
   margin: 0 auto 32px auto; /* center and add spacing below */
-  /* Sticky behavior */
-  position: sticky;
-  top: 120px; /* Adjust based on heading + description height */
-  background: #fafafa; /* Match page background to avoid overlap issues */
-  padding: 12px 0;
-  z-index: 10; /* Stay above results */
 }
 
 /* Adjust input and button inside form container */
