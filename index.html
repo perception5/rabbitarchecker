@@ -3,16 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <title>Rabbitars Wallet Checker</title>
-  <style>
-    body { font-family: sans-serif; max-width: 600px; margin: 40px auto; }
-    input, button { padding: 8px; margin: 6px 0; width: 100%; }
-    .nft { margin: 12px 0; padding: 10px; border: 1px solid #ccc; }
-    img { max-width: 150px; display: block; cursor: pointer; }
-    pre { background: #f4f4f4; padding: 10px; overflow-x: auto; }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Playboy Rabbitars Wallet Checker</h1>
+  <h1>Rabbitars Wallet Checker</h1>
   <p>Paste an Ethereum wallet address to check ownership.</p>
   <input id="wallet" placeholder="0x...">
   <button onclick="checkNFTs()">Check Wallet</button>
@@ -45,23 +40,21 @@
         debug.textContent = JSON.stringify(data, null, 2);
 
         if (data.ownedNfts && data.ownedNfts.length > 0) {
-          results.innerHTML = `<h2>Rabbitars Found!</h2>`;
+          results.innerHTML = "";
           data.ownedNfts.forEach(nft => {
             const tokenId = parseInt(nft.id.tokenId, 16);
             const div = document.createElement("div");
             div.className = "nft";
 
-            // Build openSeaLink deep link
             const openSeaLink = `https://opensea.io/assets/ethereum/${CONTRACT}/${tokenId}`;
 
             div.innerHTML = `
-              <p>Token ID: ${tokenId}</p>
               ${nft.media && nft.media[0] && nft.media[0].gateway ? `<a href="${openSeaLink}" target="_blank"><img src="${nft.media[0].gateway}" alt="NFT image"></a>` : ""}
+              <p>Token ID: ${tokenId}</p>
             `;
             results.appendChild(div);
           });
 
-          // Pagination button
           if (data.pageKey) {
             const nextBtn = document.createElement("button");
             nextBtn.textContent = "Load More";
@@ -70,7 +63,7 @@
           }
 
         } else {
-          results.innerHTML = "No Rabbitars owned.";
+          results.innerHTML = "<p style='text-align:center;color:#777;'>No Rabbitars owned.</p>";
         }
       } catch (err) {
         results.innerHTML = "Error: " + err;
